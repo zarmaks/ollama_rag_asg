@@ -8,3 +8,4 @@ pydantic
 pytest
 httpx
 pytest-asyncio
+langchain-community==0.3.27

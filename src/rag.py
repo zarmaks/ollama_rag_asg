@@ -4,6 +4,8 @@ from langchain_community.retrievers import BM25Retriever
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
+from langchain.retrievers import EnsembleRetriever
+
 
 class FAQRAGService:
     def __init__(self, docs):
@@ -16,7 +18,12 @@ class FAQRAGService:
                                          persist_directory="chroma_db")
         bm25 = BM25Retriever.from_documents(docs, k=3)
         sem = self.vdb.as_retriever(search_kwargs={"k": 3})
-        self.retriever = bm25  # Use BM25Retriever as the primary retriever
+        #self.retriever = bm25  # Use BM25Retriever as the primary retriever
+        self.retriever = EnsembleRetriever(
+            retrievers=[sem, bm25],
+            weights=[0.6, 0.4]
+        )
+
 
         template = (
             "You are a helpful FAQ assistant.\n"
