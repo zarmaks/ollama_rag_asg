@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+langchain
+chromadb
+ollama-python
+sqlalchemy
+pydantic
+pytest
+httpx
+pytest-asyncio

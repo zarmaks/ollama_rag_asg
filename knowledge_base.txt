@@ -1,0 +1,142 @@
+Q: What is CloudSphere Platform and who is it for?
+A: CloudSphere Platform is our unified cloud-native application and data-services suite designed for software vendors, digital agencies, and IT teams that need to build, deploy, and scale web or mobile workloads quickly. It bundles managed Kubernetes clusters, a fully managed PostgreSQL database, serverless functions, object storage, and observability tooling—all accessible from a single console or API.
+
+---
+
+Q: Which products and add-ons are included in each pricing tier?
+A: **Essential** (\$49 / month) covers 2 vCPU, 4 GB RAM, 100 GB storage, and community support. **Professional** (\$149 / month) raises limits to 8 vCPU, 16 GB RAM, 500 GB storage, adds autoscaling, and 24 × 5 chat support. **Enterprise** (from \$499 / month) offers dedicated clusters, unlimited storage, custom SLAs, SAML-based SSO, and a named technical account manager. All tiers can bolt on extra CPU, RAM, or storage at published overage rates in the console.
+
+---
+
+Q: Do you offer a free trial?
+A: Yes—new organisations get a 14-day free trial of the Professional tier with \$100 in platform credits. No credit card is required to start; simply sign up at [https://console.cloudsphere.com](https://console.cloudsphere.com) and follow the email verification link that arrives within five minutes.
+
+---
+
+Q: Are there any hidden or setup fees?
+A: No. All charges are transparent and published on our [Pricing](https://cloudsphere.com/pricing) page. We bill strictly for consumption beyond included quotas and never charge onboarding, migration, or early-termination fees.
+
+---
+
+Q: How often will I be billed, and in which currency?
+A: Invoices are generated monthly on the calendar day you first subscribed. Charges are in US dollars (USD). Enterprise contracts can opt for quarterly or annual invoicing in USD, EUR, or GBP.
+
+---
+
+Q: What payment methods do you accept?
+A: We accept Visa, Mastercard, American Express, PayPal, and ACH transfers (ACH available for invoices over \$1,000). Enterprise customers may arrange net-30 wire transfers—contact [billing@cloudsphere.com](mailto:billing@cloudsphere.com) to enable this.
+
+---
+
+Q: Where can I download my invoices and view current usage?
+A: Log in to the console → **Settings → Billing → Invoices**. PDFs for the last 24 months are available instantly. Real-time usage graphs sit under **Billing → Usage Dashboard**.
+
+---
+
+Q: How do I upgrade, downgrade, or cancel my subscription?
+A: Go to **Settings → Plan & Subscriptions** in the console, choose *Change Plan*, and confirm. Upgrades take effect immediately; downgrades and cancellations take effect at the next renewal date. You will receive an email confirmation for any change.
+
+---
+
+Q: I forgot my console password. How can I reset it?
+A: Click **Forgot password?** on the sign-in page, enter your account email, and we’ll send a secure reset link valid for 60 minutes. If the email doesn’t arrive, check spam or whitelist [notifications@cloudsphere.com](mailto:notifications@cloudsphere.com).
+
+---
+
+Q: What multi-factor authentication (MFA) options do you support?
+A: CloudSphere supports TOTP apps (Authy, Google Authenticator, Microsoft Authenticator) and hardware keys via WebAuthn (YubiKey, Feitian). Administrators can enforce MFA for the entire organisation under **Settings → Security Policies**.
+
+---
+
+Q: How is my data protected in transit and at rest?
+A: All network traffic is encrypted with TLS 1.3. Data at rest in our block, object, and database storage is encrypted using AES-256 with keys managed by AWS KMS. We run quarterly penetration tests and daily vulnerability scans, and results are available under NDA.
+
+---
+
+Q: What industry compliance certifications do you have?
+A: CloudSphere is SOC 2 Type II, ISO 27001, GDPR, and HIPAA-ready. Formal audit reports can be requested by emailing [compliance@cloudsphere.com](mailto:compliance@cloudsphere.com) from an authorised corporate domain.
+
+---
+
+Q: What Service Level Agreement (SLA) do you provide?
+A: We guarantee 99.9 % monthly uptime for Essential/Professional and 99.95 % for Enterprise. If uptime falls below those thresholds we credit 10 %–50 % of the monthly fee, depending on the outage duration, automatically reflected on your next invoice.
+
+---
+
+Q: How can I monitor platform status in real time?
+A: Visit [https://status.cloudsphere.com](https://status.cloudsphere.com) or subscribe to email, SMS, or Slack notifications. The page shows component-level metrics updated every 60 seconds and a 90-day incident history.
+
+---
+
+Q: When are scheduled maintenance windows, and how will I be notified?
+A: Routine maintenance occurs Sundays 02:00–04:00 UTC. We post a status page advisory and send email notices at least seven days prior. Enterprise customers receive a 30-day custom maintenance calendar.
+
+---
+
+Q: How do I deploy my application via the CLI?
+A: Install our CLI (`brew install cloudsphere` or download from our GitHub), then run `cs login`, `cs create app my-app`, and `cs deploy . --env production`. The CLI streams build logs and exits non-zero on failure, making it CI/CD-friendly.
+
+---
+
+Q: What authentication mechanisms does the REST API use?
+A: All API calls require an HTTP `Authorization: Bearer <token>` header. Tokens are issued via the OAuth 2.0 client-credentials flow and expire after two hours. Refresh tokens last 30 days and can be rotated via the **API Keys** page.
+
+---
+
+Q: What are the API rate limits?
+A: By default, each organisation may issue 10 requests per second and 100,000 requests per day. Burst requests are queued and return **429 Too Many Requests** with a `Retry-After` header. Enterprise customers can request higher limits at no extra cost.
+
+---
+
+Q: Do you provide SDKs or client libraries?
+A: Yes—official SDKs are available for Python, JavaScript/TypeScript, Java, Go, and .NET. All are MIT-licensed on GitHub (github.com/cloudsphere-inc/sdk-<lang>), fully generated from our OpenAPI spec and published within 24 hours of any schema change.
+
+---
+
+Q: Can I integrate CloudSphere with my existing CI/CD pipeline?
+A: Absolutely. We provide first-class GitHub Actions (`cloudsphere-deploy`), GitLab CI templates, and a Jenkins shared library. Each action handles authentication, environment variable injection, and rollback logic out of the box.
+
+---
+
+Q: Where can I find the OpenAPI or Swagger documentation?
+A: Navigate to [https://api.cloudsphere.com/docs](https://api.cloudsphere.com/docs) for an interactive Swagger UI explorer, example requests, and an environment selector. The `swagger.json` can be downloaded for offline use or client-generation.
+
+---
+
+Q: How do I troubleshoot a failed deployment?
+A: First, open the deployment in the console and inspect the build logs for error codes (e.g., `E101 Docker build failed`). Click *View full log* to download a 14-day log archive. Common issues—such as missing `Dockerfile`—are documented at [https://docs.cloudsphere.com/troubleshooting](https://docs.cloudsphere.com/troubleshooting). If you’re stuck, email a log snippet and deployment ID to [support@cloudsphere.com](mailto:support@cloudsphere.com); typical response time is under 30 minutes during business hours.
+
+---
+
+Q: What support channels are available and what are your business hours?
+A: Community forum and docs are 24 × 7. Live chat and email ([support@cloudsphere.com](mailto:support@cloudsphere.com), +1 800 555-0199) operate Monday–Friday, 07:00–19:00 US Eastern (11:00–23:00 UTC). Enterprise contracts include a 24 × 7 critical-incident hotline.
+
+---
+
+Q: What is your data retention policy for deleted resources?
+A: Deleted databases and file objects enter a 14-day soft-delete state, during which you can self-restore without opening a ticket. After 14 days, data is purged from primary storage and off-site backups within 30 days, in line with GDPR requirements.
+
+---
+
+Q: How can I request permanent data erasure when closing my account?
+A: Submit a **Right to Erasure** request from **Settings → Privacy**, or email [privacy@cloudsphere.com](mailto:privacy@cloudsphere.com) with your organisation ID. We will complete erasure within 30 days and send written confirmation once all backups age out.
+
+---
+
+Q: What is your refund policy?
+A: Month-to-month plans are non-refundable, but if we miss our SLA you’ll receive automatic service credits as outlined above. Annual upfront plans may be cancelled within 30 days for a prorated refund minus used-month charges. Initiate the request via **Settings → Plan & Subscriptions → Cancel → Refund Review**.
+
+---
+
+Q: How do I permanently close my account?
+A: You must first delete all active projects. Then, under **Settings → Account → Close Account**, confirm the action by typing your organisation name. A final confirmation email is sent; once confirmed, the account is deactivated within 24 hours and billing stops.
+
+---
+
+Q: Can I install CloudSphere on-premises?
+A: An on-prem “Private CloudSphere” appliance is available for Enterprise subscribers with regulatory constraints. It ships as an air-gapped Kubernetes helm chart and includes a dedicated support bundle. Contact [sales@cloudsphere.com](mailto:sales@cloudsphere.com) for pricing and a proof-of-concept license.
+
+---
+
+Q: How do I request a custom feature or roadmap update?
+A: Open a feature request in the feedback portal at [https://feedback.cloudsphere.com](https://feedback.cloudsphere.com), vote on existing ideas, or email [product@cloudsphere.com](mailto:product@cloudsphere.com) with detailed use-cases. Our product team triages requests weekly and publishes quarterly roadmap updates.
