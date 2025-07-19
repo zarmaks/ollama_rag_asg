@@ -38,8 +38,10 @@ class FAQRAGService:
             | StrOutputParser()
         )
 
-    def _ctx(self, question: str) -> str:
-        docs = self.retriever.get_relevant_documents(question)
+    def _ctx(self, inputs) -> str:
+        # LangChain περνάει ολόκληρο το input dict στη συνάρτηση
+        question = inputs["query"] if isinstance(inputs, dict) else str(inputs)
+        docs = self.retriever.invoke(question)
         return "\n\n".join(d.page_content for d in docs)
 
     def answer(self, question: str) -> str:

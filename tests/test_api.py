@@ -1,16 +1,22 @@
 from fastapi.testclient import TestClient
+from unittest.mock import patch, Mock
 from src.main import app
 
 client = TestClient(app)
 
 
-def test_ask_and_history():
+@patch('src.routes.rag_service')
+def test_ask_and_history(mock_rag_service):
     """Test /ask endpoint and then /history endpoint."""
+    # Mock the RAG service response
+    mock_rag_service.answer.return_value = "Mocked answer"
+    
     # Test /ask endpoint
     res = client.post("/ask", json={"question": "anything"})
     assert res.status_code == 200
     data = res.json()
     assert "answer" in data
+    assert data["answer"] == "Mocked answer"
 
     # Test /history endpoint
     hist = client.get("/history")
@@ -18,8 +24,12 @@ def test_ask_and_history():
     assert isinstance(hist.json(), list)
 
 
-def test_ask_endpoint():
+@patch('src.routes.rag_service')
+def test_ask_endpoint(mock_rag_service):
     """Test the /ask endpoint with a sample question."""
+    # Mock the RAG service response
+    mock_rag_service.answer.return_value = "CloudSphere is a platform"
+    
     response = client.post("/ask", json={"question": "What is CloudSphere Platform?"})
     assert response.status_code == 200
     data = response.json()
@@ -53,5 +63,5 @@ def test_ask_invalid_json():
 
 def test_history_invalid_limit():
     """Test the /history endpoint with invalid limit."""
-    response = client.get("/history?n=invalid")
+    response = client.get("/history?limit=invalid")
     assert response.status_code == 422  # Validation error

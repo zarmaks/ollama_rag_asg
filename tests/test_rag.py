@@ -28,7 +28,7 @@ def test_ctx_method():
     with patch.object(FAQRAGService, '__init__', lambda x, y: None):
         rag = FAQRAGService([])
         rag.retriever = Mock()
-        rag.retriever.get_relevant_documents.return_value = docs
+        rag.retriever.invoke.return_value = docs
         
         context = rag._ctx("test question")
         assert isinstance(context, str)
@@ -44,8 +44,7 @@ def test_faq_rag_service_initialization():
     with patch('src.rag.OllamaEmbeddings'), \
          patch('src.rag.Chroma'), \
          patch('src.rag.BM25Retriever'), \
-         patch('src.rag.EnsembleRetriever'), \
-         patch('src.rag.Ollama'), \
+         patch('src.rag.OllamaLLM'), \
          patch('src.rag.ChatPromptTemplate'):
         
         # This should not raise an exception
