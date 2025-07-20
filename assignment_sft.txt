@@ -44,6 +44,7 @@ knowledge base or top-matching FAQ).
 • Write a simple ORM model (e.g., using SQLAlchemy or sqlite3 module).
 Bonus Points
 • Add basic logging and error handling
+
 Knowledge Base Example (for reference)
 You can provide a markdown or .txt file with content like:
 Q: What is the refund policy?

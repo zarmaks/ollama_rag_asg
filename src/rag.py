@@ -5,12 +5,20 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 from langchain.retrievers import EnsembleRetriever
+from langchain.schema import Document
+from typing import List
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FAQRAGService:
-    def __init__(self, docs):
+    def __init__(self, docs: List[Document]) -> None:
         """
-        Initialize embeddings, vector store, retrievers, prompt, and chain.
+        Initialize RAG service with embeddings, vector store, and retrievers.
+        
+        Args:
+            docs: List of Document objects containing Q&A pairs
         """
         self.emb = OllamaEmbeddings(model="nomic-embed-text",
                                     base_url="http://localhost:11434")
@@ -46,20 +54,29 @@ class FAQRAGService:
         )
 
     def _ctx(self, inputs) -> str:
-        # LangChain περνάει ολόκληρο το input dict στη συνάρτηση
+        """Extract context from retrieved documents for the given question."""
+        # LangChain processes the input dict during summarization
         question = inputs["query"] if isinstance(inputs, dict) else str(inputs)
         docs = self.retriever.invoke(question)
         return "\n\n".join(d.page_content for d in docs)
 
     def answer(self, question: str) -> str:
         """Return the LLM-generated answer for the given question."""
-        return self.chain.invoke({"query": question})
+        try:
+            return self.chain.invoke({"query": question})
+        except Exception as e:
+            logger.error(f"RAG service failed: {e}")
+            return ("I'm sorry, I'm having trouble processing "
+                    "your question right now.")
 
 
 class ContextInjectionService:
-    def __init__(self, docs):
+    def __init__(self, docs: List[Document]) -> None:
         """
-        Initialize with full knowledge base context injection.
+        Initialize context injection service with full knowledge base.
+        
+        Args:
+            docs: List of Document objects containing Q&A pairs
         """
         # Store all document content as a single context string
         self.full_context = "\n\n".join(doc.page_content for doc in docs)
@@ -87,4 +104,9 @@ class ContextInjectionService:
 
     def answer(self, question: str) -> str:
         """Return the LLM-generated answer for the given question."""
-        return self.chain.invoke({"query": question})
+        try:
+            return self.chain.invoke({"query": question})
+        except Exception as e:
+            logger.error(f"Context injection service failed: {e}")
+            return ("I'm sorry, I'm having trouble processing "
+                    "your question right now.")

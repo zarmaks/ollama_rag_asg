@@ -45,7 +45,8 @@ def test_faq_rag_service_initialization():
          patch('src.rag.Chroma'), \
          patch('src.rag.BM25Retriever'), \
          patch('src.rag.OllamaLLM'), \
-         patch('src.rag.ChatPromptTemplate'):
+         patch('src.rag.ChatPromptTemplate'), \
+         patch('src.rag.EnsembleRetriever'):
         
         # This should not raise an exception
         rag = FAQRAGService(docs)
