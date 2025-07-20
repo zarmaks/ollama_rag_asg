@@ -1,0 +1,44 @@
+[
+  {
+    "success": true,
+    "answer": " CloudSphere Platform is a unified cloud-native application and data-services suite designed for software vendors, digital agencies, and IT teams that need to build, deploy, and scale web or mobile workloads quickly. It bundles managed Kubernetes clusters, a fully managed PostgreSQL database, serverless functions, object storage, and observability tooling—all accessible from a single console or API.",
+    "time": 34.177144289016724,
+    "method": "RAG",
+    "question": "What is CloudSphere Platform?"
+  },
+  {
+    "success": true,
+    "answer": " CloudSphere Platform is a unified cloud-native application and data-services suite designed for software vendors, digital agencies, and IT teams that need to build, deploy, and scale web or mobile workloads quickly. It bundles managed Kubernetes clusters, a fully managed PostgreSQL database, serverless functions, object storage, and observability tooling—all accessible from a single console or API.",
+    "time": 21.809273719787598,
+    "method": "Context Injection",
+    "question": "What is CloudSphere Platform?"
+  },
+  {
+    "success": true,
+    "answer": " To find out about the pricing details of the cheapest plan, you should refer to our Pricing page at <https://cloudsphere.com/pricing>. The specific details of what the cheapest plan includes can be found there.",
+    "time": 42.46955633163452,
+    "method": "RAG",
+    "question": "How much does the cheapest plan cost and what does it include?"
+  },
+  {
+    "success": true,
+    "answer": " The cheapest plan is the Essential tier, which costs $49 per month. It includes 2 vCPU, 4 GB RAM, 100 GB storage, and community support.",
+    "time": 14.029810905456543,
+    "method": "Context Injection",
+    "question": "How much does the cheapest plan cost and what does it include?"
+  },
+  {
+    "success": true,
+    "answer": " The context provided does not specify the programming languages supported by CloudSphere Platform for development. For more detailed information, I recommend visiting the official CloudSphere website or contacting their sales team at [sales@cloudsphere.com](mailto:sales@cloudsphere.com) for further assistance.",
+    "time": 37.60572028160095,
+    "method": "RAG",
+    "question": "What programming languages does CloudSphere support for development?"
+  },
+  {
+    "success": false,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)",
+    "time": 122.02623248100281,
+    "method": "Context Injection",
+    "question": "What programming languages does CloudSphere support for development?"
+  }
+]

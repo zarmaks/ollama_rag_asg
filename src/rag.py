@@ -54,3 +54,37 @@ class FAQRAGService:
     def answer(self, question: str) -> str:
         """Return the LLM-generated answer for the given question."""
         return self.chain.invoke({"query": question})
+
+
+class ContextInjectionService:
+    def __init__(self, docs):
+        """
+        Initialize with full knowledge base context injection.
+        """
+        # Store all document content as a single context string
+        self.full_context = "\n\n".join(doc.page_content for doc in docs)
+        
+        template = (
+            "You are a helpful FAQ assistant.\n"
+            "Based on the following Q&A pairs, answer the user's question.\n"
+            "If the answer is not in the context, say so politely.\n\n"
+            "Context:\n{context}\n\n"
+            "Question: {query}\n\n"
+            "Answer:"
+        )
+        prompt = ChatPromptTemplate.from_template(template)
+        llm = OllamaLLM(model="mistral",
+                        base_url="http://localhost:11434",
+                        temperature=0.3)
+
+        self.chain = (
+            {"context": lambda x: self.full_context,
+             "query": RunnablePassthrough()}
+            | prompt
+            | llm
+            | StrOutputParser()
+        )
+
+    def answer(self, question: str) -> str:
+        """Return the LLM-generated answer for the given question."""
+        return self.chain.invoke({"query": question})

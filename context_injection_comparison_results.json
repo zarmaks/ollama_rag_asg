@@ -1,0 +1,53 @@
+[
+  {
+    "question": {
+      "type": "Easy - Direct FAQ",
+      "question": "What is CloudSphere Platform?",
+      "expected": "Should find exact match in knowledge base"
+    },
+    "rag": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=30)",
+      "response_time": 32.112
+    },
+    "context_injection": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=30)",
+      "response_time": 32.035
+    }
+  },
+  {
+    "question": {
+      "type": "Medium - Requires inference",
+      "question": "How much does the cheapest plan cost and what does it include?",
+      "expected": "Should combine info about Essential tier"
+    },
+    "rag": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=30)",
+      "response_time": 32.059
+    },
+    "context_injection": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=30)",
+      "response_time": 32.322
+    }
+  },
+  {
+    "question": {
+      "type": "Hard - Not in knowledge base",
+      "question": "What programming languages does CloudSphere support for development?",
+      "expected": "Should admit information not available"
+    },
+    "rag": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=30)",
+      "response_time": 32.079
+    },
+    "context_injection": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=30)",
+      "response_time": 32.559
+    }
+  }
+]
