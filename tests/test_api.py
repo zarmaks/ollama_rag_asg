@@ -12,7 +12,7 @@ def test_ask_and_history(mock_rag_service):
     mock_rag_service.answer.return_value = "Mocked answer"
     
     # Test /ask endpoint
-    res = client.post("/ask", json={"question": "anything"})
+    res = client.post("/ask?use_context_injection=false", json={"question": "anything"})
     assert res.status_code == 200
     data = res.json()
     assert "answer" in data
@@ -32,7 +32,7 @@ def test_ask_endpoint(mock_rag_service):
     # Mock the RAG service response
     mock_rag_service.answer.return_value = "CloudSphere is a platform"
     
-    response = client.post("/ask", json={"question": "What is CloudSphere Platform?"})
+    response = client.post("/ask?use_context_injection=false", json={"question": "What is CloudSphere Platform?"})
     assert response.status_code == 200
     data = response.json()
     assert "answer" in data
@@ -59,7 +59,7 @@ def test_history_with_limit():
 
 def test_ask_invalid_json():
     """Test the /ask endpoint with invalid JSON."""
-    response = client.post("/ask", json={"wrong_field": "test"})
+    response = client.post("/ask?use_context_injection=false", json={"wrong_field": "test"})
     assert response.status_code == 422  # Validation error
 
 
