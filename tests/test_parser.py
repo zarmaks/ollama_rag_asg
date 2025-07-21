@@ -1,4 +1,3 @@
-import pytest
 from src.parser import load_knowledge
 
 

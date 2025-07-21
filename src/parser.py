@@ -6,6 +6,7 @@ logger = logging.getLogger("app.parser")
 
 _QA_RE = re.compile(r"Q:\s*(.*?)\nA:\s*(.*?)(?:\n---|\Z)", re.S)
 
+
 def load_knowledge(path: str) -> list[Document]:
     """Load Q/A pairs from a text file."""
     logger.debug("Loading knowledge base from %s", path)
@@ -21,7 +22,7 @@ def load_knowledge(path: str) -> list[Document]:
     return [
         Document(
             page_content=f"Q: {q.strip()}\nA: {a.strip()}",
-            metadata={"question": q.strip()}
+            metadata={"question": q.strip()},
         )
         for q, a in pairs
     ]

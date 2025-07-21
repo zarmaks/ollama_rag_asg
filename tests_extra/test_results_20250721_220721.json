@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-07-21T22:07:21.888036",
+  "basic_success_rate": 0.0,
+  "avg_response_time": 0.0,
+  "error_handling_rate": 0.3333333333333333,
+  "history_working": true,
+  "mode_comparison": {
+    "Context Injection": {
+      "success": false,
+      "time": 0
+    },
+    "RAG": {
+      "success": false,
+      "time": 0
+    }
+  },
+  "total_test_time": 0
+}

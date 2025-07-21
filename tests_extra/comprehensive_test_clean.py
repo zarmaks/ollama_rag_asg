@@ -507,26 +507,23 @@ def main():
         orig_post = requests.post
         def post_with_mode(url, *args, **kwargs):
             if "/ask" in url and "json" in kwargs:
-                if "use_context_injection" not in kwargs["json"]:
-                    kwargs["json"]["use_context_injection"] = mode["param"]
+                # Σωστός τρόπος: query parameter, όχι JSON body
+                if "params" not in kwargs:
+                    kwargs["params"] = {}
+                kwargs["params"]["use_context_injection"] = mode["param"]
             return orig_post(url, *args, **kwargs)
         requests.post = post_with_mode
         test_results = {}
         try:
-            print("\n⏸️  Press Enter to start basic functionality tests...")
-            input()
+            print("\n🚀 Starting basic functionality tests...")
             test_results['basic'], basic_details = test_basic_functionality()
-            print("\n⏸️  Press Enter to continue to edge cases testing...")
-            input()
+            print("\n🚀 Continuing to edge cases testing...")
             test_results['edge_cases'] = test_edge_cases()
-            print("\n⏸️  Press Enter to continue to history testing...")
-            input()
+            print("\n🚀 Continuing to history testing...")
             test_results['history'] = test_history_endpoint()
-            print("\n⏸️  Press Enter to continue to performance testing...")
-            input()  
+            print("\n🚀 Continuing to performance testing...")
             test_results['performance'] = test_performance()
-            print("\n⏸️  Press Enter to continue to knowledge coverage testing...")
-            input()
+            print("\n🚀 Continuing to knowledge coverage testing...")
             test_results['coverage'] = test_knowledge_coverage()
         except KeyboardInterrupt:
             print("\n\n⏹️  Testing interrupted by user.")

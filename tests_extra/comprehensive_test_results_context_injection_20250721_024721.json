@@ -1,0 +1,96 @@
+{
+  "summary": {
+    "basic": 0.16666666666666666,
+    "edge_cases": 0.14285714285714285,
+    "history": true,
+    "performance": 29.52589324315389,
+    "coverage": 66.66666666666666
+  },
+  "basic_details": [
+    {
+      "category": "Product Overview",
+      "question": "What is CloudSphere Platform and who is it for?",
+      "expected_keywords": [
+        "cloud-native",
+        "Kubernetes",
+        "PostgreSQL"
+      ],
+      "status_code": null,
+      "response_time": null,
+      "answer": null,
+      "keywords_found": 0,
+      "error": "Timeout"
+    },
+    {
+      "category": "Pricing - Direct Match",
+      "question": "How much does the Professional tier cost?",
+      "expected_keywords": [
+        "$149",
+        "month",
+        "Professional"
+      ],
+      "status_code": null,
+      "response_time": null,
+      "answer": null,
+      "keywords_found": 0,
+      "error": "Timeout"
+    },
+    {
+      "category": "Trial Information",
+      "question": "Do you offer a free trial?",
+      "expected_keywords": [
+        "14-day",
+        "Professional tier",
+        "$100"
+      ],
+      "status_code": null,
+      "response_time": null,
+      "answer": null,
+      "keywords_found": 0,
+      "error": "Timeout"
+    },
+    {
+      "category": "Authentication Support",
+      "question": "I forgot my password, how can I reset it?",
+      "expected_keywords": [
+        "Forgot password",
+        "reset link",
+        "60 minutes"
+      ],
+      "status_code": null,
+      "response_time": null,
+      "answer": null,
+      "keywords_found": 0,
+      "error": "Timeout"
+    },
+    {
+      "category": "Compliance & Security",
+      "question": "What industry compliance certifications do you have?",
+      "expected_keywords": [
+        "SOC 2",
+        "ISO 27001",
+        "GDPR",
+        "HIPAA"
+      ],
+      "status_code": null,
+      "response_time": null,
+      "answer": null,
+      "keywords_found": 0,
+      "error": "Timeout"
+    },
+    {
+      "category": "API Technical Details",
+      "question": "What are the API rate limits?",
+      "expected_keywords": [
+        "10 requests per second",
+        "100,000",
+        "429"
+      ],
+      "status_code": 200,
+      "response_time": 49.83961248397827,
+      "answer": " By default, each organization may issue 10 requests per second and 100,000 requests per day. Burst requests are queued and return **429 Too Many Requests** with a `Retry-After` header. Enterprise customers can request higher limits at no extra cost.",
+      "keywords_found": 3,
+      "error": null
+    }
+  ]
+}

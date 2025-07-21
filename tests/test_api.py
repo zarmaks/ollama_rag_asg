@@ -1,16 +1,16 @@
 from fastapi.testclient import TestClient
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from src.main import app
 
 client = TestClient(app)
 
 
-@patch('src.routes.rag_service')
+@patch("src.routes.rag_service")
 def test_ask_and_history(mock_rag_service):
     """Test /ask endpoint and then /history endpoint."""
     # Mock the RAG service response - need to mock the answer method
     mock_rag_service.answer.return_value = "Mocked answer"
-    
+
     # Test /ask endpoint
     res = client.post("/ask", json={"question": "anything"})
     assert res.status_code == 200
@@ -26,12 +26,12 @@ def test_ask_and_history(mock_rag_service):
     assert isinstance(hist.json(), list)
 
 
-@patch('src.routes.rag_service')
+@patch("src.routes.rag_service")
 def test_ask_endpoint(mock_rag_service):
     """Test the /ask endpoint with a sample question."""
     # Mock the RAG service response
     mock_rag_service.answer.return_value = "CloudSphere is a platform"
-    
+
     response = client.post("/ask", json={"question": "What is CloudSphere Platform?"})
     assert response.status_code == 200
     data = response.json()

@@ -27,12 +27,7 @@ def get_history(db: Session, limit: int = 10) -> list[Interaction]:
     """Retrieve the latest interactions from the database."""
     logger.debug("Fetching last %d interactions", limit)
     try:
-        return (
-            db.query(Interaction)
-              .order_by(Interaction.ts.desc())
-              .limit(limit)
-              .all()
-        )
+        return db.query(Interaction).order_by(Interaction.ts.desc()).limit(limit).all()
     except Exception as exc:
         logger.error("Failed to fetch history: %s", exc)
         raise
