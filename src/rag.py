@@ -9,7 +9,7 @@ from langchain.schema import Document
 from typing import List
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("app.rag")
 
 
 class FAQRAGService:
@@ -20,6 +20,7 @@ class FAQRAGService:
         Args:
             docs: List of Document objects containing Q&A pairs
         """
+        logger.debug("Setting up FAQRAGService with %d documents", len(docs))
         self.emb = OllamaEmbeddings(model="nomic-embed-text",
                                     base_url="http://localhost:11434")
         self.vdb = Chroma.from_documents(docs, self.emb,
@@ -58,6 +59,7 @@ class FAQRAGService:
         # LangChain processes the input dict during summarization
         question = inputs["query"] if isinstance(inputs, dict) else str(inputs)
         docs = self.retriever.invoke(question)
+        logger.debug("Retrieved %d documents for context", len(docs))
         return "\n\n".join(d.page_content for d in docs)
 
     def answer(self, question: str) -> str:
@@ -78,6 +80,7 @@ class ContextInjectionService:
         Args:
             docs: List of Document objects containing Q&A pairs
         """
+        logger.debug("Setting up ContextInjectionService with %d documents", len(docs))
         # Store all document content as a single context string
         self.full_context = "\n\n".join(doc.page_content for doc in docs)
         

@@ -7,11 +7,16 @@ from .parser import load_knowledge
 from .rag import FAQRAGService, ContextInjectionService
 from . import crud, schemas
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("app.routes")
 
 # Initialize DB tables and RAG services on startup
+logger.info("Initializing database tables")
 Base.metadata.create_all(bind=engine)
+
+logger.info("Loading knowledge base")
 _docs = load_knowledge("knowledge_base.txt")
+
+logger.info("Starting RAG services")
 rag_service = FAQRAGService(_docs)
 context_service = ContextInjectionService(_docs)
 
@@ -47,8 +52,10 @@ def ask(q: schemas.QuestionIn,
     
     try:
         if use_context_injection:
+            logger.debug("Using context injection service")
             answer = context_service.answer(q.question)
         else:
+            logger.debug("Using FAQ RAG service")
             answer = rag_service.answer(q.question)
             
         crud.log_interaction(db, q.question, answer)
@@ -77,7 +84,7 @@ def history(limit: int = 10,
         List of previous question-answer interactions with timestamps
     """
     try:
-        logger.info(f"Retrieving {limit} history records")
+        logger.debug("Retrieving %d history records", limit)
         return crud.get_history(db, limit)
     except Exception as e:
         logger.error(f"Error retrieving history: {str(e)}")
