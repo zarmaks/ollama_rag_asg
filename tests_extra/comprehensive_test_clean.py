@@ -1,7 +1,7 @@
 """
 Comprehensive test script για το FAQ-RAG System (CloudSphere Knowledge Base).
 
-Τρέξε το με: python comprehensive_test.py
+Τρέξε το με: python tests_extra/comprehensive_test_clean.py
 Βεβαιώσου ότι το API τρέχει με:
 uvicorn src.main:app --host 127.0.0.1 --port 8000
 """
@@ -64,44 +64,48 @@ def test_basic_functionality():
         }
     ]
     
+    results = []
     successful_tests = 0
     total_tests = len(test_questions)
-    
     for i, test_case in enumerate(test_questions):
         print(f"\n🔍 Test {i+1}/{total_tests}: {test_case['category']}")
         print(f"❓ Question: '{test_case['question']}'")
         print("-" * 50)
-        
+        result = {
+            "category": test_case['category'],
+            "question": test_case['question'],
+            "expected_keywords": test_case['expected_keywords'],
+            "status_code": None,
+            "response_time": None,
+            "answer": None,
+            "keywords_found": 0,
+            "error": None
+        }
         try:
             start_time = time.time()
-            
             response = requests.post(
                 f"{BASE_URL}/ask",
                 json={"question": test_case['question']},
                 timeout=60
             )
-            
             end_time = time.time()
             response_time = end_time - start_time
-            
+            result["status_code"] = response.status_code
+            result["response_time"] = response_time
             if response.status_code == 200:
                 answer = response.json()["answer"]
-                
+                result["answer"] = answer
                 print(f"✅ Status: SUCCESS ({response.status_code})")
                 print(f"⏱️  Response time: {response_time:.2f} seconds")
-                
-                # Show answer preview
                 answer_preview = answer[:200]
                 if len(answer) > 200:
                     answer_preview += "..."
                 print(f"📝 Answer: {answer_preview}")
-                
-                # Check for expected keywords (basic relevance test)
                 keywords_found = 0
                 for keyword in test_case['expected_keywords']:
                     if keyword.lower() in answer.lower():
                         keywords_found += 1
-                
+                result["keywords_found"] = keywords_found
                 if keywords_found > 0:
                     expected_count = len(test_case['expected_keywords'])
                     print(f"🎯 Relevance: {keywords_found}/{expected_count} keywords found")
@@ -109,23 +113,25 @@ def test_basic_functionality():
                 else:
                     print("⚠️  Warning: No expected keywords found in answer")
                     print(f"   Expected: {test_case['expected_keywords']}")
-                    
             else:
                 print(f"❌ Error: HTTP {response.status_code}")
                 try:
                     error_detail = response.json().get('detail', 'Unknown error')
                     print(f"   Details: {error_detail}")
+                    result["error"] = error_detail
                 except Exception:
                     print(f"   Raw response: {response.text}")
-                    
+                    result["error"] = response.text
         except requests.exceptions.Timeout:
             print("⏰ Timeout: Request took longer than 60 seconds")
+            result["error"] = "Timeout"
         except Exception as e:
             print(f"❌ Exception: {str(e)}")
-    
+            result["error"] = str(e)
+        results.append(result)
     result_msg = f"Basic Functionality Results: {successful_tests}/{total_tests} successful"
     print_subsection(result_msg)
-    return successful_tests / total_tests
+    return successful_tests / total_tests, results
 
 
 def test_edge_cases():
@@ -165,7 +171,7 @@ def test_edge_cases():
         },
         {
             "name": "Missing field",
-            "payload": {"wrong_field": "test"},
+            "payload": {},
             "expected_status": [422]
         }
     ]
@@ -488,101 +494,74 @@ def main():
     
     print("\n🎯 Starting comprehensive testing...")
     
-    test_results = {}
-    
-    try:
-        print("\n⏸️  Press Enter to start basic functionality tests...")
-        input()
-        test_results['basic'] = test_basic_functionality()
-        
-        print("\n⏸️  Press Enter to continue to edge cases testing...")
-        input()
-        test_results['edge_cases'] = test_edge_cases()
-        
-        print("\n⏸️  Press Enter to continue to history testing...")
-        input()
-        test_results['history'] = test_history_endpoint()
-        
-        print("\n⏸️  Press Enter to continue to performance testing...")
-        input()  
-        test_results['performance'] = test_performance()
-        
-        print("\n⏸️  Press Enter to continue to knowledge coverage testing...")
-        input()
-        test_results['coverage'] = test_knowledge_coverage()
-        
-    except KeyboardInterrupt:
-        print("\n\n⏹️  Testing interrupted by user.")
-        return
-    
-    # Final summary
-    print_section("🎉 Testing Complete - Final Summary")
-    
-    print("📊 Test Results:")
-    
-    if 'basic' in test_results:
-        print(f"   🔧 Basic Functionality: {test_results['basic']*100:.1f}% success rate")
-    
-    if 'edge_cases' in test_results:
-        print(f"   🧪 Edge Cases: {test_results['edge_cases']*100:.1f}% handled correctly")
-    
-    if 'history' in test_results:
-        history_status = "✅ Working" if test_results['history'] else "❌ Failed"
-        print(f"   📋 History Endpoint: {history_status}")
-    
-    if 'performance' in test_results and test_results['performance']:
-        print(f"   ⚡ Average Response Time: {test_results['performance']:.2f}s")
-    
-    if 'coverage' in test_results:
-        print(f"   📚 Knowledge Coverage: {test_results['coverage']:.1f}%")
-    
-    # Overall system health assessment
-    health_score = 0
-    total_metrics = 0
-    
-    if 'basic' in test_results:
-        health_score += test_results['basic'] * 30  # 30% weight
-        total_metrics += 30
-    
-    if 'edge_cases' in test_results:
-        health_score += test_results['edge_cases'] * 20  # 20% weight  
-        total_metrics += 20
-    
-    if 'history' in test_results:
-        health_score += (1 if test_results['history'] else 0) * 10  # 10% weight
-        total_metrics += 10
-    
-    if 'coverage' in test_results:
-        health_score += (test_results['coverage'] / 100) * 40  # 40% weight
-        total_metrics += 40
-    
-    if total_metrics > 0:
-        overall_health = health_score / total_metrics * 100
-        if overall_health >= 80:
-            health_emoji = "🟢"
-        elif overall_health >= 60:
-            health_emoji = "🟡"
-        else:
-            health_emoji = "🔴"
-        print(f"\n{health_emoji} Overall System Health: {overall_health:.1f}%")
-    
-    # Recommendations
-    print("\n💡 Recommendations:")
-    
-    if test_results.get('basic', 0) < 0.8:
-        print("   - Review knowledge base relevance and LLM prompt tuning")
-    
-    if test_results.get('performance', 0) and test_results['performance'] > 10:
-        print("   - Consider optimizing LLM response time or adding caching")
-    
-    if test_results.get('coverage', 0) < 70:
-        print("   - Expand knowledge base coverage for underperforming areas")
-    
-    print("   - Monitor logs for any errors during testing")
-    print("   - Consider adding more specific test cases for your use case")
-    
-    system_status = "ready for production" if overall_health >= 80 else "needs optimization"
-    print(f"\n🏁 Testing completed! Your CloudSphere FAQ-RAG system is {system_status}.")
+    # Run tests for both context injection (default) and RAG
+    import json
+    from datetime import datetime
+    modes = [
+        {"name": "context_injection", "param": True},
+        {"name": "rag", "param": False}
+    ]
+    all_mode_results = {}
+    for mode in modes:
+        print_section(f"Running tests in mode: {mode['name']}")
+        orig_post = requests.post
+        def post_with_mode(url, *args, **kwargs):
+            if "/ask" in url and "json" in kwargs:
+                if "use_context_injection" not in kwargs["json"]:
+                    kwargs["json"]["use_context_injection"] = mode["param"]
+            return orig_post(url, *args, **kwargs)
+        requests.post = post_with_mode
+        test_results = {}
+        try:
+            print("\n⏸️  Press Enter to start basic functionality tests...")
+            input()
+            test_results['basic'], basic_details = test_basic_functionality()
+            print("\n⏸️  Press Enter to continue to edge cases testing...")
+            input()
+            test_results['edge_cases'] = test_edge_cases()
+            print("\n⏸️  Press Enter to continue to history testing...")
+            input()
+            test_results['history'] = test_history_endpoint()
+            print("\n⏸️  Press Enter to continue to performance testing...")
+            input()  
+            test_results['performance'] = test_performance()
+            print("\n⏸️  Press Enter to continue to knowledge coverage testing...")
+            input()
+            test_results['coverage'] = test_knowledge_coverage()
+        except KeyboardInterrupt:
+            print("\n\n⏹️  Testing interrupted by user.")
+            return
+        finally:
+            requests.post = orig_post
+        all_mode_results[mode['name']] = {"summary": test_results, "basic_details": basic_details}
+        # Save results to file
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"comprehensive_test_results_{mode['name']}_{timestamp}.json"
+        try:
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump({"summary": test_results, "basic_details": basic_details}, f, indent=2, ensure_ascii=False)
+            print(f"💾 Results saved to: {filename}")
+        except Exception as e:
+            print(f"⚠️  Could not save results: {str(e)}")
+    # Final summary comparison
+    print_section("🎉 Testing Complete - Final Summary (Comparison)")
+    for mode in modes:
+        name = mode['name']
+        print(f"\n=== {name.upper()} MODE ===")
+        summary = all_mode_results[name]["summary"]
+        print("📊 Test Results:")
+        if 'basic' in summary:
+            print(f"   🔧 Basic Functionality: {summary['basic']*100:.1f}% success rate")
+        if 'edge_cases' in summary:
+            print(f"   🧪 Edge Cases: {summary['edge_cases']*100:.1f}% handled correctly")
+        if 'history' in summary:
+            history_status = "✅ Working" if summary['history'] else "❌ Failed"
+            print(f"   📋 History Endpoint: {history_status}")
+        if 'performance' in summary and summary['performance']:
+            print(f"   ⚡ Average Response Time: {summary['performance']:.2f}s")
+        if 'coverage' in summary:
+            print(f"   📚 Knowledge Coverage: {summary['coverage']:.1f}%")
+    print("\n💡 Use the saved JSON files for detailed comparison and analysis.")
 
 
 if __name__ == "__main__":

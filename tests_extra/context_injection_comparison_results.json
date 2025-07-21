@@ -1,0 +1,53 @@
+[
+  {
+    "question": {
+      "type": "Easy - Direct FAQ",
+      "question": "What is CloudSphere Platform?",
+      "expected": "Should find exact match in knowledge base"
+    },
+    "rag": {
+      "success": true,
+      "answer": " CloudSphere Platform is a unified cloud-native application and data-services suite designed for software vendors, digital agencies, and IT teams that need to build, deploy, and scale web or mobile workloads quickly. It bundles managed Kubernetes clusters, a fully managed PostgreSQL database, serverless functions, object storage, and observability tooling—all accessible from a single console or API.",
+      "response_time": 21.403
+    },
+    "context_injection": {
+      "success": true,
+      "answer": " CloudSphere Platform is a unified cloud-native application and data-services suite designed for software vendors, digital agencies, and IT teams that need to build, deploy, and scale web or mobile workloads quickly. It bundles managed Kubernetes clusters, a fully managed PostgreSQL database, serverless functions, object storage, and observability tooling—all accessible from a single console or API.",
+      "response_time": 18.748
+    }
+  },
+  {
+    "question": {
+      "type": "Medium - Requires inference",
+      "question": "How much does the cheapest plan cost and what does it include?",
+      "expected": "Should combine info about Essential tier"
+    },
+    "rag": {
+      "success": true,
+      "answer": " The cheapest plan is the Essential tier, which costs $49 per month. It includes 2 vCPU, 4 GB RAM, 100 GB storage, and community support.",
+      "response_time": 11.301
+    },
+    "context_injection": {
+      "success": true,
+      "answer": " The cheapest plan offered by CloudSphere is the Essential tier, which costs $49 per month. This plan includes 2 vCPU, 4 GB RAM, 100 GB storage, and community support.",
+      "response_time": 11.372
+    }
+  },
+  {
+    "question": {
+      "type": "Hard - Not in knowledge base",
+      "question": "What programming languages does CloudSphere support for development?",
+      "expected": "Should admit information not available"
+    },
+    "rag": {
+      "success": true,
+      "answer": " CloudSphere supports development in multiple programming languages, including Python, JavaScript/TypeScript, Java, Go, and .NET. Official SDKs are available for each of these languages, which can be found on GitHub (github.com/cloudsphere-inc/sdk-<lang>). These SDKs are fully generated from the OpenAPI spec and updated within 24 hours of any schema change.",
+      "response_time": 20.85
+    },
+    "context_injection": {
+      "success": true,
+      "answer": " CloudSphere supports development in various programming languages, including Python, JavaScript/TypeScript, Java, Go, and .NET.",
+      "response_time": 7.238
+    }
+  }
+]
