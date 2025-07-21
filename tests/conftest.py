@@ -31,7 +31,7 @@ A: Yes, we offer a 14-day free trial with $100 in platform credits.
     os.unlink(temp_path)
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def clean_database():
     """Clean database before each test."""
     # Drop all tables and recreate them
