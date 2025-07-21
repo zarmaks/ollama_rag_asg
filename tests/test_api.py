@@ -67,3 +67,18 @@ def test_history_invalid_limit():
     """Test the /history endpoint with invalid limit."""
     response = client.get("/history?limit=invalid")
     assert response.status_code == 422  # Validation error
+
+
+@patch('src.routes.rag_service')
+def test_ask_without_context_injection(mock_rag_service):
+    """Ensure /ask uses rag_service when context injection is disabled."""
+    # Mock the rag service to avoid heavy dependencies
+    mock_rag_service.answer.return_value = "RAG response"
+
+    q = {"question": "Explain the pricing"}
+    res = client.post("/ask?use_context_injection=false", json=q)
+
+    assert res.status_code == 200
+    assert res.json()["answer"] == "RAG response"
+    # Verify that rag_service was called with the provided question
+    mock_rag_service.answer.assert_called_once_with(q["question"])
