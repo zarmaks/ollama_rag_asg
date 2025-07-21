@@ -79,6 +79,19 @@ Q: What are your business hours?
 A: We are open Monday through Friday from 9 AM to 6 PM EST.
 ```
 
+## Logging
+
+The application uses Python's ``logging`` module. Logs are printed to
+``stdout`` and grouped by category:
+
+- ``app.routes`` – API layer
+- ``app.rag`` – RAG services
+- ``app.parser`` – knowledge base loader
+- ``app.db`` – database operations
+
+The default log level is ``INFO`` but ``DEBUG`` messages are available for
+additional detail.
+
 ## AI Coding Assistant Usage
 
 This project was developed with assistance from GitHub Copilot, which helped with:
