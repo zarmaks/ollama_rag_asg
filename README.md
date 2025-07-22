@@ -305,6 +305,7 @@ This is handled by the `get_ollama_base_url()` function in `src/rag.py`.
 - Requires `OPENAI_API_KEY` environment variable.
 - When building the vector store with OpenAI embeddings, the service logs the
   estimated token usage and approximate cost.
+- Context injection also runs on OpenAI when this provider is selected.
 
 ## 🐳 Docker Optimization
 

@@ -78,3 +78,39 @@ class OpenAIRAGService:
         cost_per_1k = float(os.getenv("OPENAI_EMBED_COST", "0.00002"))
         est = total_tokens / 1000 * cost_per_1k
         logger.info("Estimated embedding tokens: %d (~$%.4f)", total_tokens, est)
+
+
+class OpenAIContextInjectionService:
+    """Context injection service using OpenAI models."""
+
+    def __init__(self, docs: List[Document]) -> None:
+        logger.debug(
+            "Setting up OpenAIContextInjectionService with %d documents", len(docs)
+        )
+        if ChatOpenAI is None:
+            raise ImportError("langchain-openai package is required")
+
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY not set")
+
+        chat_model = os.getenv("OPENAI_MODEL", "gpt-4.1-nano")
+
+        self.full_context = "\n\n".join(doc.page_content for doc in docs)
+
+        prompt = ChatPromptTemplate.from_template(FACTUAL_FAQ_PROMPT)
+        llm = ChatOpenAI(model=chat_model, temperature=0.3, openai_api_key=api_key)
+
+        self.chain = (
+            {"context": lambda _: self.full_context, "query": RunnablePassthrough()}
+            | prompt
+            | llm
+            | StrOutputParser()
+        )
+
+    def answer(self, question: str) -> str:
+        try:
+            return self.chain.invoke({"query": question})
+        except Exception as e:
+            logger.error(f"OpenAI context injection failed: {e}")
+            return "I'm sorry, I'm having trouble processing your question right now."
