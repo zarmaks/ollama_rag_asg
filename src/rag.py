@@ -82,10 +82,23 @@ class FAQRAGService:
         """
         logger.debug("Setting up FAQRAGService with %d documents", len(docs))
         ollama_url = get_ollama_base_url()
-        self.emb = OllamaEmbeddings(
-            model="nomic-embed-text", base_url=ollama_url
-        )
-        self.vdb = Chroma.from_documents(docs, self.emb, persist_directory="chroma_db")
+        logger.info(f"Using Ollama URL: {ollama_url}")
+        
+        try:
+            logger.info("Initializing OllamaEmbeddings...")
+            self.emb = OllamaEmbeddings(
+                model="nomic-embed-text", base_url=ollama_url
+            )
+            logger.info("OllamaEmbeddings initialized successfully")
+            
+            logger.info("Setting up ChromaDB vector store...")
+            self.vdb = Chroma.from_documents(
+                docs, self.emb, persist_directory="./new_chroma_db"
+            )
+            logger.info("ChromaDB vector store initialized successfully")
+        except Exception as e:
+            logger.error(f"Error during RAG service initialization: {e}")
+            raise
         bm25 = BM25Retriever.from_documents(docs, k=3)
         sem = self.vdb.as_retriever(search_kwargs={"k": 3})
         # self.retriever = bm25  # Use BM25Retriever as the primary retriever

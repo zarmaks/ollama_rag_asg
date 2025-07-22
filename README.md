@@ -1,5 +1,15 @@
 # FAQ-RAG Service
 
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.116+-green.svg)](https://fastapi.tiangolo.com/)
+[![LangChain](https://img.shields.io/badge/LangChain-RAG-darkgreen.svg)](https://python.langchain.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-ORM-brown.svg)](https://www.sqlalchemy.org/)
+[![Ollama](https://img.shields.io/badge/Ollama-LLM-orange.svg)](https://ollama.com/)
+[![Mistral](https://img.shields.io/badge/Mistral-7B-purple.svg)](https://mistral.ai/)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Store-red.svg)](https://www.trychroma.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-Database-lightblue.svg)](https://sqlite.org/)
+
 A FastAPI-based REST API service that integrates Mistral LLM via Ollama to answer user queries using a predefined knowledge base, with comprehensive query logging and retrieval functionality.
 
 ## 🎯 Project Overview
@@ -85,15 +95,37 @@ This implementation meets all the specified requirements:
    ```bash
    git clone <repository-url>
    cd faq-rag-service
+   ```
+
+2. **Create and activate virtual environment**:
+   ```bash
+   # Using venv
+   python -m venv .venv
+   
+   # Activate on Windows
+   .venv\Scripts\activate
+   
+   # Activate on Linux/Mac
+   source .venv/bin/activate
+   ```
+
+3. **Install dependencies**:
+   ```bash
    pip install -r requirements.txt
    ```
 
-2. **Run the service**:
+4. **Verify Ollama is running**:
    ```bash
-   uvicorn src.main:app --reload
+   ollama list
+   # Should show mistral and nomic-embed-text models
    ```
 
-3. **Access endpoints**:
+5. **Run the service**:
+   ```bash
+   uvicorn src.main:app --reload --port 8000
+   ```
+
+6. **Access endpoints**:
    - API Documentation: http://localhost:8000/docs
    - Service Status: http://localhost:8000/
 
@@ -182,13 +214,13 @@ A: You can reach our support team via email at support@cloudsphere.com or call o
 
 The CloudSphere knowledge base was created through a strategic multi-stage AI process:
 
-#### Stage 1: Prompt Engineering (Claude Opus 3)
+#### Stage 1: Prompt Engineering (Claude Opus 4)
 Three different prompt strategies were developed and evaluated:
 1. **Comprehensive coverage approach**: Broad FAQ categories with balanced complexity
 2. **Customer journey mapping**: Questions organized by user lifecycle stages  
 3. **Support ticket analysis**: FAQ based on common support scenarios
 
-#### Stage 2: Content Generation (ChatGPT-3)
+#### Stage 2: Content Generation (ChatGPT ο3)
 The selected prompt strategy was implemented to generate the final knowledge base:
 
 ```
@@ -254,6 +286,7 @@ Invoke-RestMethod -Uri http://localhost:8000/history?limit=5
 ```
 faq-rag-service/
 ├── src/                          # Core application code
+│   ├── __init__.py              # Package initialization
 │   ├── main.py                   # FastAPI app initialization
 │   ├── routes.py                 # API endpoint definitions
 │   ├── models.py                 # SQLAlchemy database models
@@ -263,16 +296,23 @@ faq-rag-service/
 │   ├── parser.py                 # Knowledge base parser
 │   └── rag.py                    # RAG service implementation
 ├── tests/                        # Unit and integration tests
+│   ├── __init__.py              # Package initialization
 │   ├── test_api.py              # API endpoint testing
+│   ├── test_crud.py             # CRUD operations testing
 │   ├── test_parser.py           # Parser testing
-│   ├── test_rag.py              # RAG service testing
-│   └── conftest.py              # Pytest configuration
-├── data/
+│   └── test_rag.py              # RAG service testing
+├── experiments/                  # Research and comparison scripts
+├── data/                         # Knowledge base and configurations
 │   ├── knowledge_base.txt       # FAQ knowledge base
 │   └── knowledge_base_prompt.txt # Knowledge base prompts
+├── docs/                         # Project documentation
+│   └── assignment_sft.txt       # Assignment specifications
+├── results/                      # Test results and analytics
+│   └── README.md                # Results documentation
 ├── requirements.txt              # Python dependencies
 ├── Dockerfile                    # Container configuration
 ├── pytest.ini                   # Pytest settings
+├── .gitignore                   # Git ignore rules
 └── README.md                    # This documentation
 ```
 
@@ -325,7 +365,7 @@ The Dockerfile includes several optimizations:
 
 This project demonstrates a methodical approach to leveraging multiple AI tools throughout the software development lifecycle, showcasing how different LLMs can be strategically employed for their unique strengths.
 
-### Phase 1: Learning & Architecture Planning (Claude Opus 3)
+### Phase 1: Learning & Architecture Planning (Claude Opus 4)
 **Initial consultation and education approach:**
 - **Day-by-day development plan**: Created a structured timeline breaking down RAG system components
 - **Interactive learning sessions**: In-depth discussions about FastAPI endpoints, CRUD operations, and database design patterns
@@ -334,16 +374,16 @@ This project demonstrates a methodical approach to leveraging multiple AI tools 
 
 *This phase was crucial for building deep understanding rather than just copying code - similar to working with a senior architect who explains the 'why' behind each decision.*
 
-### Phase 2: Implementation & Code Development (ChatGPT-4 Mini)
+### Phase 2: Implementation & Code Development (ChatGPT ο4-mini-high)
 **Core development and function completion:**
 - **Function implementation**: Real-time assistance in completing class methods and API handlers
 - **Code logic refinement**: Interactive debugging and optimization of algorithmic components
 - **Integration patterns**: Seamless connection between FastAPI routes, database operations, and RAG pipeline
 - **Type hint completion**: Ensuring production-ready code with proper typing throughout
 
-*ChatGPT-4 Mini proved excellent for rapid iteration during active coding sessions, providing immediate context-aware suggestions.*
+*ChatGPT ο4-mini-high proved excellent for rapid iteration during active coding sessions, providing immediate context-aware suggestions.*
 
-### Phase 3: Integration & Quality Assurance (GitHub Copilot with Claude Sonnet 3.5)
+### Phase 3: Integration & Quality Assurance (GitHub Copilot with Claude Sonnet 4 in Agent Mode)
 **Production readiness and comprehensive testing:**
 - **Agent-based code review**: Automated identification and resolution of compatibility issues between modules
 - **Test suite generation**: Complete pytest implementation covering unit tests, integration tests, and API endpoints
@@ -364,17 +404,17 @@ This project demonstrates a methodical approach to leveraging multiple AI tools 
 
 ### Knowledge Base Creation Workflow
 **Multi-stage content generation process:**
-- **Prompt engineering (Claude Opus 3)**: Created three different approaches for FAQ generation
-- **Content creation (ChatGPT-3)**: Selected optimal prompt strategy and generated comprehensive CloudSphere knowledge base
+- **Prompt engineering (Claude Opus 4)**: Created three different approaches for FAQ generation
+- **Content creation (ChatGPT o3)**: Selected optimal prompt strategy and generated comprehensive CloudSphere knowledge base
 - **Quality validation**: Ensured realistic SaaS company scenarios with appropriate technical depth
 
 ### Strategic AI Tool Selection Rationale
 
 | Development Phase | Primary Tool | Rationale |
 |------------------|--------------|-----------|
-| **Planning & Learning** | Claude Opus 3 | Superior explanatory capabilities and architectural thinking |
-| **Active Coding** | ChatGPT-4 Mini | Fast, context-aware code completion during development |
-| **Quality & Integration** | GitHub Copilot + Sonnet 3.5 | Agent-based systematic improvements across entire codebase |
+| **Planning & Learning** | Claude Opus 4 | Superior explanatory capabilities and architectural thinking |
+| **Active Coding** | ChatGPT o4-mini-high | Fast, context-aware code completion during development |
+| **Quality & Integration** | GitHub Copilot + Sonnet 4 | Agent-based systematic improvements across entire codebase |
 | **Production Polish** | ChatGPT Codex | Repository-level analysis and enterprise-grade enhancements |
 
 ### Key Productivity Insights
@@ -388,7 +428,7 @@ This methodical approach to AI tool utilization resulted in faster development c
 ## 📊 Performance Considerations
 
 ### Response Times
-- Average response time: 5-30 seconds (depending on query complexity)
+- Average response time: 8-95 seconds (depending on query complexity and CPU/GPU speed)
 - First query may be slower due to model loading
 - Subsequent queries benefit from warm model cache
 
@@ -460,28 +500,3 @@ python -c "from src.database import engine; print(engine.url)"
 # Verify knowledge base parsing
 python -c "from src.parser import parse_knowledge_base; docs = parse_knowledge_base(); print(f'Loaded {len(docs)} documents')"
 ```
-
-## 📈 Future Enhancements
-
-### Potential Improvements
-- **Multiple knowledge bases**: Support for domain-specific FAQ sets
-- **User authentication**: Request tracking and rate limiting
-- **Advanced analytics**: Query analysis and knowledge gap identification
-- **Caching layer**: Redis for frequent query responses
-- **Batch processing**: Bulk query handling for enterprise use
-
-### Scaling Considerations
-- **Horizontal scaling**: Load balancer with multiple instances
-- **Database upgrade**: PostgreSQL for production workloads
-- **Model optimization**: Fine-tuned models for specific domains
-- **CDN integration**: Static asset delivery optimization
-
----
-
-## 📄 License
-
-This project is developed as a demonstration of modern RAG system implementation and FastAPI best practices for educational and evaluation purposes.
-
----
-
-**Note**: This implementation demonstrates production-ready patterns for RAG systems, including hybrid retrieval, comprehensive error handling, and scalable architecture suitable for real-world deployment.

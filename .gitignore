@@ -46,11 +46,13 @@ venv.bak/
 
 # ChromaDB
 chroma_db/
+new_chroma_db/
 
 # Test extras and GitHub workflows (excluded from repo)
 tests_extra/
 .github/
 quick_test.py
+test_env/
 
 # Experiment results
 results/*.json
