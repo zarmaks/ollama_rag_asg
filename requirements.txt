@@ -10,3 +10,6 @@ pytest-asyncio
 langchain-community==0.2.16
 ollama
 rank-bm25
+openai
+langchain-openai==0.2.16
+tiktoken

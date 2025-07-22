@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import logging
+import os
 from typing import Generator
 from .database import SessionLocal, Base, engine
 from .parser import load_knowledge
 from .rag import FAQRAGService, ContextInjectionService
+from .openai_service import OpenAIRAGService
 from . import crud, schemas
 
 logger = logging.getLogger("app.routes")
@@ -17,7 +19,14 @@ logger.info("Loading knowledge base")
 _docs = load_knowledge("data/knowledge_base.txt")
 
 logger.info("Starting RAG services")
-rag_service = FAQRAGService(_docs)
+provider = os.getenv("LLM_PROVIDER", "ollama").lower()
+if provider == "openai":
+    logger.info("Using OpenAI backend")
+    rag_service = OpenAIRAGService(_docs)
+else:
+    logger.info("Using Ollama backend")
+    rag_service = FAQRAGService(_docs)
+
 context_service = ContextInjectionService(_docs)
 
 router = APIRouter()
