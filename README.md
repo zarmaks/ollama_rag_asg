@@ -111,7 +111,11 @@ This implementation meets all the specified requirements:
 
 3. **Install dependencies**:
    ```bash
+   # Using pip
    pip install -r requirements.txt
+   
+   # Or using uv (faster, recommended)
+   uv pip install -r requirements.txt
    ```
 
 4. **Verify Ollama is running**:
@@ -279,6 +283,93 @@ Invoke-RestMethod -Uri http://localhost:8000/ask -Method Post -ContentType "appl
 
 # Test the history endpoint  
 Invoke-RestMethod -Uri http://localhost:8000/history?limit=5
+```
+
+## 🛠️ Development Tools & Commands
+
+### Environment Setup
+
+**Create and activate virtual environment**:
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate on Linux/macOS
+source .venv/bin/activate
+
+# Activate on Windows
+.venv\Scripts\activate
+```
+
+**Install dependencies with uv (recommended)**:
+```bash
+# Install project in editable mode with all dependencies
+uv pip install -e .
+
+# Or install from requirements.txt
+uv pip install -r requirements.txt
+```
+
+### Development Workflow
+
+**Unit Testing**:
+```bash
+# Run all tests
+pytest tests
+
+# Run with verbose output
+pytest tests -v
+
+# Run specific test file
+pytest tests/test_api.py
+
+# Run with coverage
+pytest tests --cov=src
+```
+
+**Code Quality**:
+```bash
+# Linting (removing unnecessary imports, etc.)
+ruff check --fix src tests
+
+# Code formatting
+ruff format src tests
+
+# Both linting and formatting
+ruff check --fix src tests && ruff format src tests
+```
+
+**Development Server**:
+```bash
+# Standard uvicorn
+uvicorn src.main:app --reload --port 8000
+
+# Using explicit Python path (if environment issues)
+python -m uvicorn src.main:app --reload --port 8000
+```
+
+### Quick Development Setup
+
+For a complete development setup from scratch:
+```bash
+# 1. Clone and navigate
+git clone <repository-url>
+cd faq-rag-service
+
+# 2. Setup environment
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# .venv\Scripts\activate   # Windows
+
+# 3. Install dependencies
+uv pip install -e .
+
+# 4. Verify setup
+pytest tests
+ruff check src tests
+
+# 5. Start development server
+uvicorn src.main:app --reload --port 8000
 ```
 
 ## 🏗️ Project Structure
