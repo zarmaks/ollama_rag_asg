@@ -41,7 +41,7 @@ def test_faq_rag_service_initialization():
         patch("src.rag.OllamaEmbeddings"),
         patch("src.rag.Chroma"),
         patch("src.rag.BM25Retriever"),
-        patch("src.rag.OllamaLLM"),
+        patch("src.rag.Ollama"),
         patch("src.rag.ChatPromptTemplate"),
         patch("src.rag.EnsembleRetriever"),
     ):

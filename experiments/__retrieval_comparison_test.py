@@ -242,7 +242,7 @@ def test_retrieval_comparison():
     
     print("🔄 Loading knowledge base...")
     try:
-        docs = load_knowledge("knowledge_base.txt")
+        docs = load_knowledge("data/knowledge_base.txt")
         print(f"✅ Loaded {len(docs)} documents from knowledge base")
     except Exception as e:
         print(f"❌ Failed to load knowledge base: {str(e)}")
@@ -569,7 +569,7 @@ def main():
     print("Make sure Ollama is running with nomic-embed-text and mistral models")
     
     # Check if knowledge base exists
-    if not Path("knowledge_base.txt").exists():
+    if not Path("data/knowledge_base.txt").exists():
         print("❌ knowledge_base.txt not found!")
         return
     

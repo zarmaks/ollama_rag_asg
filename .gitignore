@@ -47,6 +47,20 @@ venv.bak/
 # ChromaDB
 chroma_db/
 
+# Test extras and GitHub workflows (excluded from repo)
+tests_extra/
+.github/
+quick_test.py
+
+# Experiment results
+results/*.json
+results/*.txt
+results/*_results_*.json
+
+# Cache directories
+.pytest_cache/
+.ruff_cache/
+
 # Logs
 *.log
 logs/

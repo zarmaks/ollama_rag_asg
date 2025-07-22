@@ -1,4 +1,5 @@
-from langchain_ollama import OllamaEmbeddings, OllamaLLM
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.llms import Ollama
 from langchain_community.vectorstores import Chroma
 from langchain_community.retrievers import BM25Retriever
 from langchain.prompts import ChatPromptTemplate
@@ -8,6 +9,7 @@ from langchain.retrievers import EnsembleRetriever
 from langchain.schema import Document
 from typing import List
 import logging
+import os
 
 # --- PROMPT TEMPLATES ---
 # Old template (for research/comparison)
@@ -58,6 +60,18 @@ FACTUAL_FAQ_PROMPT = (
 logger = logging.getLogger("app.rag")
 
 
+def get_ollama_base_url() -> str:
+    """
+    Determine the correct Ollama base URL based on environment.
+    Returns host.docker.internal:11434 for Docker containers, localhost:11434 for local dev.
+    """
+    # Check if running in Docker (common environment variable)
+    if os.environ.get("HOSTNAME") or os.path.exists("/.dockerenv"):
+        return "http://host.docker.internal:11434"
+    # Default to localhost for local development
+    return "http://localhost:11434"
+
+
 class FAQRAGService:
     def __init__(self, docs: List[Document]) -> None:
         """
@@ -67,8 +81,9 @@ class FAQRAGService:
             docs: List of Document objects containing Q&A pairs
         """
         logger.debug("Setting up FAQRAGService with %d documents", len(docs))
+        ollama_url = get_ollama_base_url()
         self.emb = OllamaEmbeddings(
-            model="nomic-embed-text", base_url="http://localhost:11434"
+            model="nomic-embed-text", base_url=ollama_url
         )
         self.vdb = Chroma.from_documents(docs, self.emb, persist_directory="chroma_db")
         bm25 = BM25Retriever.from_documents(docs, k=3)
@@ -78,8 +93,8 @@ class FAQRAGService:
 
         # Use the new factual prompt for RAG
         prompt = ChatPromptTemplate.from_template(FACTUAL_FAQ_PROMPT)
-        llm = OllamaLLM(
-            model="mistral", base_url="http://localhost:11434", temperature=0.3
+        llm = Ollama(
+            model="mistral", base_url=ollama_url, temperature=0.3
         )
 
         self.chain = (
@@ -119,8 +134,8 @@ class ContextInjectionService:
 
         # Use the new factual prompt for context injection
         prompt = ChatPromptTemplate.from_template(FACTUAL_FAQ_PROMPT)
-        llm = OllamaLLM(
-            model="mistral", base_url="http://localhost:11434", temperature=0.3
+        llm = Ollama(
+            model="mistral", base_url=get_ollama_base_url(), temperature=0.3
         )
 
         self.chain = (

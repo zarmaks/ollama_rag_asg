@@ -1,11 +1,12 @@
 fastapi
 uvicorn
-langchain
-chromadb
-ollama-python
+langchain==0.2.16
+chromadb==0.4.24
 sqlalchemy
 pydantic
 pytest
 httpx
 pytest-asyncio
-langchain-community==0.3.27
+langchain-community==0.2.16
+ollama
+rank-bm25
