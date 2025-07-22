@@ -429,9 +429,14 @@ This is handled by the `get_ollama_base_url()` function in `src/rag.py`.
 - Ensemble weights: 60% semantic, 40% keyword
 
 **LLM Settings**:
-- Model: `mistral` 
+- Model: `mistral` (default)
 - Temperature: 0.3 (for consistent responses)
 - Embedding model: `nomic-embed-text`
+- Set `LLM_PROVIDER=openai` to use OpenAI models.
+- Requires `OPENAI_API_KEY` environment variable.
+- When building the vector store with OpenAI embeddings, the service logs the
+  estimated token usage and approximate cost.
+- Context injection also runs on OpenAI when this provider is selected.
 
 ## 🐳 Docker Optimization
 

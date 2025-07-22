@@ -1,5 +1,6 @@
 from unittest.mock import Mock, patch
 from src.rag import FAQRAGService, ContextInjectionService
+from src.openai_service import OpenAIRAGService, OpenAIContextInjectionService
 from langchain.schema import Document
 
 
@@ -61,3 +62,32 @@ def test_context_injection_answer():
         
         result = service.answer("hello")
         assert result == "resp"
+
+
+def test_openai_rag_service_initialization(monkeypatch):
+    """OpenAIRAGService should initialize with provided documents."""
+    docs = [Document(page_content="Q: t\nA: a")]
+    with (
+        patch("src.openai_service.OpenAIEmbeddings"),
+        patch("src.openai_service.Chroma"),
+        patch("src.openai_service.BM25Retriever"),
+        patch("src.openai_service.ChatOpenAI"),
+        patch("src.openai_service.ChatPromptTemplate"),
+        patch("src.openai_service.EnsembleRetriever"),
+    ):
+        monkeypatch.setenv("OPENAI_API_KEY", "test")
+        service = OpenAIRAGService(docs)
+        assert service is not None
+
+
+def test_openai_context_injection_initialization(monkeypatch):
+    """OpenAIContextInjectionService should initialize with documents."""
+    docs = [Document(page_content="Q: t\nA: a")]
+    with (
+        patch("src.openai_service.ChatOpenAI"),
+        patch("src.openai_service.ChatPromptTemplate"),
+    ):
+        monkeypatch.setenv("OPENAI_API_KEY", "test")
+        service = OpenAIContextInjectionService(docs)
+        assert service is not None
+
